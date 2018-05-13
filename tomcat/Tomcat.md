@@ -32,4 +32,8 @@ acceptor 스레드는 먼저 Thread Pool에 놀고 있는 스레드가 있는지
 
 위 그림을 통해 정리를 해보자. 먼저 연결 요청이 오면 연결 요청 큐에 넣는다. 그리고 두 컴퓨터 사이에 연결이 완성되면 그 연결을 connection queue 에 넣는다. 여기서 위에 설명하지 않은 것이 있다. connection queue 의 갯수는 톰캣에서 디폴트로 정해져 있다. 물론 설정을 바꿀 수 있다. connection queue 의 갯수는 디폴트로 Integer.MAX_VALUE 이다. 이 외에는 모두 거부하게 된다. Integer의 최대 값은 2,147,483,647 이다. connection 이 완료된 큐에서 acceptor 스레드가 하나씩 연결을 가져와 스레드 풀에게 건내준다. 이 때 스레드 풀의 상태에 따라 그 연결을 받을 수도, acceptor 스레드가 기다려야할 수도 있다. 그 내용은 위 스레드 풀 내용을 참조하기 바란다. 그리고 스레드 풀도 기본 디폴트 값이 있다. 기본적으로 최소 25개의 스레드는 돌아가고 최대 200개의 스레드가 동시에 일을 처리하게 된다. 그리고 요청 중에는 계속 둘 사이가 계속 연결되어 있어야 하는 요청이 있다. 그런데 그 연결이 중간에 어떤 상황에 빠져 끊길 수 있다. 그러면 디폴트 값으로 톰캣은 1분을 기다린다. 그 후에도 연결이 안 오면 연결을 끊고 스레드를 다시 free로 바꾼다. 마지막으로 acceptor 스레드는 연결과 일을 스레드 풀에 넘겼으면 다시 연결을 가져 오기 위해 돌아간다. 
 
-이 일련의 과정을 통해 톰캣이 요청을 받는다. 그렇기 때문에 우리가 처리하는 각각의 요청은 모두 다른 스레드가 처리하고 있다. 
+이 일련의 과정을 통해 톰캣이 요청을 받는다. 그렇기 때문에 우리가 처리하는 각각의 요청은 모두 다른 스레드가 처리하고 있다.
+
+참조 문헌: 
+[Tuning Tomcat For A High Throughput, Fail Fast System](https://medium.com/netflix-techblog/tuning-tomcat-for-a-high-throughput-fail-fast-system-e4d7b2fc163f) 
+[Apache Tomcat 7 The Executor](https://tomcat.apache.org/tomcat-7.0-doc/config/executor.html)
