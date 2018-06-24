@@ -124,7 +124,36 @@ PC Registers 는 쓰레드가 하나 생성될 때마다 그 쓰레드의 PC Reg
 
 ![java stack image](https://github.com/shouwn/Thread/blob/master/images/Java-Stack.gif)
 
-### 1) 쓰레드의 메모리 공유
+###  쓰레드의 메모리 공유
+
+
+
+ - 개별 소유
+	 - Stack
+	 - PC
+	 - TLS (Thread Local Storage)
+ - 공유
+	 - Heap
+	 - Method Area
+
+각 쓰레드 당 하나씩 개별적으로 소유하는 메모리가 있고, 모든 쓰레드가 공유하는 메모리가 있다. 개별 소유의 경우, 다른 쓰레드는 다른 쓰레드의 메모리 공간을 볼 수 없다. 공유의 경우, 모든 쓰레드는 공유 메모리 공간에 있는 것을 모두 볼 수 있다. 
+
+![thread_memory](https://github.com/shouwn/Thread/blob/master/images/Thread-memory.gif)
+
+#### stack
+각 쓰레드는 stack 영역이 독립적이기 때문에, 메소드 호출 시 stack에 생성되는 지역변수와 매개변수는 모두 Thread-safe 하다.
+
+#### PC
+각 쓰레드가 현재 어느 명령을 실행중인지 나타낸다. 그렇기 때문에 각 쓰레드 마다 하나씩 따로 존재하게 된다.
+
+#### TLS (Thread Local Storage)
+쓰레드 마다 각자가 가지는 고유 메모리 영역인데 이는 나중에 다시 설명하도록 한다.
+
+#### Heap
+Heap은 객체가 있는 메모리 영역이라고 알고 있을 것이다. 모든 Thread는 Heap을 공유하기 때문에 객체들은 모든 Thread가 접근할 수 있다. 이는 객체의 동시 접근을 허용하기 때문에, 문제가 발생할 수 있다.
+
+#### Method Area
+type 정보와 메소드 정보는 공유하는 데 문제가 없다. 하지만 static 변수들도 공유되기 때문에, static 변수들의 동시 접근이 가능하여 문제가 발생할 수 있다.
 
 
 ## 참조
