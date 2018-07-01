@@ -3,11 +3,15 @@ package basic;
 public class ThreadMake implements Runnable{
 
 	public static void main(String[] args) {
-		new Thread(new ThreadMake()).start();
-		new Thread(new ThreadMake()).start();
-		new Thread(new ThreadMake()).start();
-		new Thread(new ThreadMake()).start();
-		new Thread(new ThreadMake()).start();
+		Thread t1 =
+				new Thread(new ThreadMake());
+		
+		Thread t2 =
+				new Thread(new ThreadMake());
+
+		t1.start();
+		t2.start();
+		
 		print();
 	}
 
@@ -18,6 +22,7 @@ public class ThreadMake implements Runnable{
 		while(i++ < 10) {
 			ThreadMake.print();
 			try {
+				System.exit(0);
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
