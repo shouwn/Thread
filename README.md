@@ -175,7 +175,38 @@ type 정보와 메소드 정보는 공유하는 데 문제가 없다. 하지만 
 
 각 메모리 별로 쓰레드가 메모리를 개별 소유하는지 공유하는지 알아보았다. 그런데 공유하는 메모리 영역의 경우 문제가 생길 수 있다고 적혀 있다. 무슨 문제가 발생할까?
 
-    enter code here
+    class Box {
+	    private int content = 0;
+	    
+	    public void increase() {
+		    content++;
+	    }
+    }
+
+먼저 다음과 같은 클래스가 있다고 하자. 이 클래스는 content라는 멤버변수를 가지고 호출할 때마다 content를 1씩 증가시키는 메소드를 가지고 있다. 
+
+위에서 쓰레드는 Heap을 공유한다고 했다. 그러면 Box 객체를 하나만 생성하고 이를 공유할 수 있을 것이다. 그리고 공유한 Box 객체의 increase 메소드를 각 쓰레드가 10만번 호출하게 만들어보자.
+
+    public static void main(String[] args) throws InterruptedException {  
+        Box box = new Box();  
+      
+      Runnable r = () ->  
+                Stream.iterate(1, n -> n + 1).limit(100000)  
+                        .forEach(n -> box.increase());  
+      
+      Thread t1 = new Thread(r);  
+      Thread t2 =  new Thread(r);  
+      Thread t3 =  new Thread(r);  
+      
+      t1.start(); t2.start(); t3.start();  
+      
+      t1.join(); t2.join(); t3.join();  
+      
+      System.out.println(box.getContent());  
+    }
+
+이 코드 내용은 간단하다. 먼저 10만번 box의 increase를 호출하는 Runnable 객체를 만들어 모든 쓰레드가 이를 이용하여 동작하는 코드이다. 
+
 
 ## 참조
 [# [Symbolic references in Java]](https://stackoverflow.com/questions/17406159/symbolic-references-in-java)
