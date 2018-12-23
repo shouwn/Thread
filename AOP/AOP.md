@@ -1,5 +1,17 @@
-﻿# AOP
+﻿# DI 와 AOP
 
-프록시 패턴을 배우고 스프링이 이를 어떻게 AOP로 활용하는지 알아보자
+## DI
+
+예를 들어 다음과 같이 두 개의 서비스 클래스가 있고, 둘 사이에 연관관계가 있다고 가정해보자
+
+    class WrapServie {
+        BoxService boxService = new BoxService();
+    }
+
+    class BoxService {
+    
+    }
+
+WrapService 는 BoxService의 참조를 가지고 있다. 
 
 
